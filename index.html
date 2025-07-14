@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SGPA Calculator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">SGPA Calculator</h1>
+
+        <label for="semester-number">Semester:</label>
+        <select id="semester-number">
+            <option value="">Select Semester</option>
+            <option value="1">Semester 1</option>
+            <option value="2">Semester 2</option>
+            <option value="3">Semester 3</option>
+            <option value="4">Semester 4</option>
+            <option value="5">Semester 5</option>
+            <option value="6">Semester 6</option>
+            <option value="7">Semester 7</option>
+            <option value="8">Semester 8</option>
+        </select>
+
+        <input type="file" id="excel-file" accept=".xlsx,.xls" />
+        <input type="text" id="regno-input" placeholder="Enter Registration Number" />
+
+        <button id="calculate-btn">Calculate SGPA</button>
+
+        <div id="subject-list" class="subject-list"></div>
+
+        <div class="sgpa-section">
+            <p id="sgpa-result">SGPA: 0.00</p>
+            <p id="sgpa-feedback">⬅ Add grades to get feedback</p>
+        </div>
+
+        <div class="cgpa-section">
+            <h2>CGPA Calculator</h2>
+            <div id="cgpa-entries">
+                <div class="cgpa-row">
+                    <label for="cgpa-semester">Semester:</label>
+                    <select class="cgpa-semester">
+                        <option value="">Select Semester</option>
+                        <option value="1">Semester 1</option>
+                        <option value="2">Semester 2</option>
+                        <option value="3">Semester 3</option>
+                        <option value="4">Semester 4</option>
+                        <option value="5">Semester 5</option>
+                        <option value="6">Semester 6</option>
+                        <option value="7">Semester 7</option>
+                        <option value="8">Semester 8</option>
+                    </select>
+                    <input type="number" class="cgpa-sgpa" placeholder="Enter SGPA" min="0" max="10" step="0.0001" />
+                </div>
+            </div>
+            <button onclick="addCgpaRow()">+ Add More Semester</button>
+            <button onclick="calculateCGPA()">Calculate CGPA</button>
+            <p id="cgpa-result">CGPA: --</p>
+        </div>
+        <div id="subject-list">
+        </div>
+        <button id="download-btn">📄 Download SGPA Report</button>
+        <footer style="text-align: center; margin-top: 25px;">
+            made with &hearts; by Jagan
+        </footer>
+    </div>
+
+    <script src="/index.js"></script>
+</body>
+
+</html>
