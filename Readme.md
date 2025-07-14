@@ -15,3 +15,7 @@
 - 🧠 **Feedback System** – Get motivational feedback based on your SGPA.
 - 🎓 **CGPA Calculator** – Add SGPA from all semesters and calculate CGPA.
 - 🎨 **Clean UI** – Built for speed and simplicity.
+
+# for live view
+
+https://jaganparida.github.io/sgpa_and_cgpa_calculator/
