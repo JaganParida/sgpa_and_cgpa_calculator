@@ -234,5 +234,11 @@ button {
   text-align: center;
   margin-top: 40px;
   color: #999;
-  font-size: 12px;
+  font-size: 18px;
+}
+
+.main-footer a{
+  text-decoration: none;
+  color: #999;
+  cursor: pointer;
 }
