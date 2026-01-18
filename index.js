@@ -1,4 +1,4 @@
-const validGradePoints = { O: 10, E: 9, A: 8, B: 7, C: 6, D: 5, F: 0 };
+const validGradePoints = { O: 10, E: 9, A: 8, B: 7, C: 6, D: 5, F: 2, M: 0 };
 let workbookData = [];
 
 function parseCredit(val) {
@@ -47,6 +47,7 @@ function calculateSGPAFromSheet() {
   let totalWeightedPoints = 0;
   let totalSGPACredits = 0;
   let creditsCleared = 0;
+  let sGradeFound = false;
   const studentName = studentRows[0]["Name"];
 
   const tableRowsHTML = studentRows
@@ -54,10 +55,16 @@ function calculateSGPAFromSheet() {
       const grade = String(row["Grade"]).trim().toUpperCase();
       const credit = parseCredit(row["Credits"]);
 
-      if (validGradePoints.hasOwnProperty(grade)) {
-        totalWeightedPoints += validGradePoints[grade] * credit;
+      if (grade === "S") sGradeFound = true;
+
+      if (grade !== "R" && grade !== "S") {
+        const points =
+          validGradePoints[grade] !== undefined ? validGradePoints[grade] : 0;
+        totalWeightedPoints += points * credit;
         totalSGPACredits += credit;
-        if (grade !== "F") creditsCleared += credit;
+        if (grade !== "F" && grade !== "M") {
+          creditsCleared += credit;
+        }
       }
 
       return `
@@ -76,6 +83,9 @@ function calculateSGPAFromSheet() {
     totalSGPACredits > 0
       ? (totalWeightedPoints / totalSGPACredits).toFixed(2)
       : "0.00";
+  const sWarning = sGradeFound
+    ? `<div style="color: #856404; background-color: #fff3cd; border: 1px solid #ffeeba; padding: 10px; margin-bottom: 15px; border-radius: 5px; text-align: center; font-weight: bold;">⚠️ There is any logical issue due to S grade point please recheck like this.</div>`
+    : "";
 
   reportDiv.innerHTML = `
         <div id="grade-sheet-container" class="grade-sheet">
@@ -88,6 +98,7 @@ function calculateSGPAFromSheet() {
                 <div class="meta-item"><span>Name:</span> <strong>${studentName}</strong></div>
                 <div class="meta-item"><span>Semester:</span> <strong>Sem ${sem}</strong></div>
             </div>
+            ${sWarning}
             <div class="table-responsive">
                 <table class="result-table">
                     <thead>
@@ -140,7 +151,6 @@ function downloadReport() {
 
     pdf.addImage(imgData, "JPEG", 0, 0, width, height, undefined, "FAST");
     pdf.save(`SGPA_Report_${document.getElementById("regno-input").value}.pdf`);
-
     element.style.width = originalWidth;
   });
 }
