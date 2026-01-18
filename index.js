@@ -1,210 +1,177 @@
-const gradePointMap = { O: 10, E: 9, A: 8, B: 7, C: 6, D: 5, F: 0 };
+const validGradePoints = { O: 10, E: 9, A: 8, B: 7, C: 6, D: 5, F: 0 };
 let workbookData = [];
 
-function truncate(num, digits) {
-  const factor = Math.pow(10, digits);
-  return Math.floor(num * factor) / factor;
-}
-
-function parseCredit(rawCredit) {
-  if (!rawCredit) return 0;
-  return rawCredit
+function parseCredit(val) {
+  if (!val) return 0;
+  return val
     .toString()
     .split("+")
-    .reduce((sum, val) => sum + parseFloat(val || 0), 0);
+    .reduce((acc, curr) => acc + parseFloat(curr || 0), 0);
 }
 
-function calculateSGPAFromSheet() {
-  const regInput = document.getElementById("regno-input").value.trim();
-  const semInput = document.getElementById("semester-number").value.trim();
-  const resultsDiv = document.getElementById("subject-list");
-  const sgpaDisplay = document.getElementById("sgpa-result");
-  const feedbackEl = document.getElementById("sgpa-feedback");
-
-  resultsDiv.innerHTML = "";
-  sgpaDisplay.textContent = "SGPA: 0.00";
-  feedbackEl.textContent = "⬅ Add grades to get feedback";
-
-  if (!regInput || workbookData.length === 0) {
-    alert("Please enter registration number and upload the Excel file.");
-    return;
-  }
-
-  const studentRows = workbookData.filter((row) => {
-    return String(row["Reg_No"]).trim() === regInput;
-  });
-
-  if (studentRows.length === 0) {
-    resultsDiv.innerHTML = `<p class="error">❌ No data found for Reg No: <b>${regInput}</b></p>`;
-    return;
-  }
-
-  const studentName = studentRows[0]["Name"] || "Unknown";
-  let totalObtained = 0;
-  let totalMax = 0;
-
-  const rowsHTML = studentRows
-    .map((sub, index) => {
-      const grade = sub["Grade"]?.toString().trim().toUpperCase();
-      const credit = parseCredit(sub["Credits"]);
-      const subjectCode = sub["Subject_Code"] || "";
-      const subjectName = sub["Subject_Name"] || "";
-      const point = gradePointMap[grade];
-
-      if (isNaN(point) || credit === 0) return "";
-
-      const earned = point * credit;
-      const max = 10 * credit;
-
-      totalObtained += earned;
-      totalMax += max;
-
-      return `
-      <tr>
-        <td class="cell">${index + 1}</td>
-        <td class="cell">${subjectCode}</td>
-        <td class="cell">${subjectName}</td>
-        <td class="cell">${credit}</td>
-        <td class="cell">${grade}</td>
-      </tr>
-    `;
-    })
-    .filter(Boolean)
-    .join("");
-
-  const sgpa = totalMax ? truncate((totalObtained / totalMax) * 10, 4) : 0.0;
-
-  resultsDiv.innerHTML = `
-    <div class="info">
-      <h2 style="text-align:center;">SGPA Report</h2>
-      <p><strong>Name:</strong> ${studentName}</p>
-      <p><strong>College:</strong> CUTM, BBSR</p>
-      <p><strong>Semester:</strong> ${semInput}</p>
-      <div style="overflow-x:auto;">
-      <table class="modern-table" style="margin:auto; font-family:'Arial'; font-size:14px; border-collapse:collapse; border:1px solid #000;">
-        <thead style="background:#f0f0f0;">
-          <tr>
-            <th class="cell">Sl No</th>
-            <th class="cell">Subject Code</th>
-            <th class="cell">Subject Name</th>
-            <th class="cell">Credits</th>
-            <th class="cell">Grade</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rowsHTML}
-        </tbody>
-      </table>
-      </div>
-    </div>
-  `;
-
-  sgpaDisplay.textContent = `SGPA: ${sgpa}`;
-  updateFeedback(sgpa);
-}
-
-function updateFeedback(sgpa) {
-  const feedbackEl = document.getElementById("sgpa-feedback");
-  if (isNaN(sgpa) || sgpa === 0) {
-    feedbackEl.textContent = "⬅ Add grades to get feedback";
-    return;
-  }
-  if (sgpa >= 9) feedbackEl.textContent = "🔥 Excellent! Keep it up!";
-  else if (sgpa >= 8) feedbackEl.textContent = "✅ Great work, aim for 9+!";
-  else if (sgpa >= 7)
-    feedbackEl.textContent = "👍 Good, try to push a little higher.";
-  else feedbackEl.textContent = "⚠️ You can improve. Focus next term.";
-}
-
-function handleFileUpload(evt) {
-  const file = evt.target.files[0];
+function handleFileUpload(e) {
+  const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = (e) => {
-    const data = new Uint8Array(e.target.result);
-    const workbook = XLSX.read(data, { type: "array" });
-    const sheetName = workbook.SheetNames[0];
-    const sheet = workbook.Sheets[sheetName];
-    const json = XLSX.utils.sheet_to_json(sheet, { defval: "" });
-    workbookData = json;
-    alert("✅ Excel data loaded. Now enter your registration number.");
+  reader.onload = (evt) => {
+    const data = new Uint8Array(evt.target.result);
+    const wb = XLSX.read(data, { type: "array" });
+    const sheet = wb.Sheets[wb.SheetNames[0]];
+    workbookData = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+    alert("✅ Excel Data Synced Successfully.");
   };
   reader.readAsArrayBuffer(file);
 }
 
-function calculateCGPA() {
-  const sgpaInputs = document.querySelectorAll(".cgpa-sgpa");
-  let total = 0,
-    count = 0;
-  sgpaInputs.forEach((input) => {
-    const val = parseFloat(input.value);
-    if (!isNaN(val)) {
-      total += val;
-      count++;
-    }
+function calculateSGPAFromSheet() {
+  const regNo = document.getElementById("regno-input").value.trim();
+  const sem = document.getElementById("semester-number").value;
+  const reportDiv = document.getElementById("report-output");
+  const downloadBtn = document.getElementById("download-btn");
+
+  if (!regNo || workbookData.length === 0) {
+    alert("Please upload file and enter Registration Number.");
+    return;
+  }
+
+  const studentRows = workbookData.filter(
+    (row) => String(row["Reg_No"]).trim() === regNo,
+  );
+  if (studentRows.length === 0) {
+    reportDiv.innerHTML =
+      "<div style='color:red; text-align:center; padding:20px; font-weight:bold;'>❌ No data found for this Reg No.</div>";
+    downloadBtn.style.display = "none";
+    return;
+  }
+
+  let totalWeightedPoints = 0;
+  let totalSGPACredits = 0;
+  let creditsCleared = 0;
+  const studentName = studentRows[0]["Name"];
+
+  const tableRowsHTML = studentRows
+    .map((row, index) => {
+      const grade = String(row["Grade"]).trim().toUpperCase();
+      const credit = parseCredit(row["Credits"]);
+
+      if (validGradePoints.hasOwnProperty(grade)) {
+        totalWeightedPoints += validGradePoints[grade] * credit;
+        totalSGPACredits += credit;
+        if (grade !== "F") creditsCleared += credit;
+      }
+
+      return `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${row["Subject_Code"] || ""}</td>
+                <td style="text-align:left;">${row["Subject_Name"] || ""}</td>
+                <td>${row["Type"] || ""}</td>
+                <td>${credit.toFixed(1)}</td>
+                <td>${grade}</td>
+            </tr>`;
+    })
+    .join("");
+
+  const finalSGPA =
+    totalSGPACredits > 0
+      ? (totalWeightedPoints / totalSGPACredits).toFixed(2)
+      : "0.00";
+
+  reportDiv.innerHTML = `
+        <div id="grade-sheet-container" class="grade-sheet">
+            <div class="sheet-header">
+                <h2>Centurion University of Technology and Management</h2>
+                <h3 class="sheet-title">Semester Grade Sheet</h3>
+            </div>
+            <div class="student-meta-grid">
+                <div class="meta-item"><span>Regd. No:</span> <strong>${regNo}</strong></div>
+                <div class="meta-item"><span>Name:</span> <strong>${studentName}</strong></div>
+                <div class="meta-item"><span>Semester:</span> <strong>Sem ${sem}</strong></div>
+            </div>
+            <div class="table-responsive">
+                <table class="result-table">
+                    <thead>
+                        <tr>
+                            <th>SL.NO</th>
+                            <th>SUB.CODE</th>
+                            <th>SUBJECT</th>
+                            <th>TYPE</th>
+                            <th>CREDIT</th>
+                            <th>GRADE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tableRowsHTML}
+                    </tbody>
+                </table>
+            </div>
+            <div class="sheet-footer">
+                <div class="footer-info">
+                    <p>Credits Cleared: ${creditsCleared}</p>
+                    <p>Generated On: ${new Date().toLocaleDateString("en-GB")}</p>
+                </div>
+                <div class="sgpa-badge">
+                    <span class="label">SGPA</span>
+                    <span class="value">${finalSGPA}</span>
+                </div>
+            </div>
+        </div>
+    `;
+
+  document.getElementById("sgpa-result").innerText = finalSGPA;
+  downloadBtn.style.display = "block";
+}
+
+function downloadReport() {
+  const element = document.getElementById("grade-sheet-container");
+  const originalWidth = element.style.width;
+  element.style.width = "900px";
+
+  html2canvas(element, {
+    scale: 3.5,
+    useCORS: true,
+    windowWidth: 1200,
+  }).then((canvas) => {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "mm", "a4");
+    const imgData = canvas.toDataURL("image/jpeg", 1.0);
+    const width = pdf.internal.pageSize.getWidth();
+    const height = (canvas.height * width) / canvas.width;
+
+    pdf.addImage(imgData, "JPEG", 0, 0, width, height, undefined, "FAST");
+    pdf.save(`SGPA_Report_${document.getElementById("regno-input").value}.pdf`);
+
+    element.style.width = originalWidth;
   });
-  const cgpa = count > 0 ? (total / count).toFixed(4) : "--";
-  document.getElementById("cgpa-result").textContent = `CGPA: ${cgpa}`;
 }
 
 function addCgpaRow() {
-  const container = document.getElementById("cgpa-entries");
-  const row = document.createElement("div");
-  row.className = "cgpa-row";
-  row.innerHTML = `
-    <label for="cgpa-semester">Semester:</label>
-    <select class="cgpa-semester">
-      <option value="">Select Semester</option>
-      ${[1, 2, 3, 4, 5, 6, 7, 8]
-        .map((i) => `<option value="${i}">Semester ${i}</option>`)
-        .join("")}
-    </select>
-    <input type="number" class="cgpa-sgpa" placeholder="Enter SGPA" min="0" max="10" step="0.0001" />
-  `;
-  container.appendChild(row);
+  const div = document.createElement("div");
+  div.className = "cgpa-row";
+  div.innerHTML = `<input type="number" class="cgpa-sgpa" placeholder="Enter SGPA" step="0.01" style="width:100%; margin-top:10px;"/>`;
+  document.getElementById("cgpa-entries").appendChild(div);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  document
-    .getElementById("excel-file")
-    ?.addEventListener("change", handleFileUpload);
-  document
-    .getElementById("calculate-btn")
-    ?.addEventListener("click", calculateSGPAFromSheet);
-  document
-    .getElementById("calculate-cgpa-btn")
-    ?.addEventListener("click", calculateCGPA);
-  document
-    .getElementById("download-btn")
-    ?.addEventListener("click", downloadReportAsPDF);
-});
-
-function downloadReportAsPDF() {
-  const resultsDiv = document.getElementById("subject-list");
-  if (!resultsDiv) return;
-
-  html2canvas(resultsDiv, {
-    scale: 2,
-    useCORS: true,
-  }).then((canvas) => {
-    const imgData = canvas.toDataURL("image/png");
-    const { jsPDF } = window.jspdf;
-
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "pt",
-      format: "a4",
-    });
-
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const imgWidth = canvas.width / 2;
-    const imgHeight = canvas.height / 2;
-    const x = (pageWidth - imgWidth) / 2;
-
-    pdf.setFont("Helvetica", "bold");
-    pdf.setFontSize(18);
-    pdf.text("SGPA Report", pageWidth / 2, 40, { align: "center" });
-    pdf.addImage(imgData, "PNG", x, 60, imgWidth, imgHeight);
-    pdf.save("SGPA_Report.pdf");
+function calculateCGPA() {
+  const inputs = document.querySelectorAll(".cgpa-sgpa");
+  let sum = 0,
+    count = 0;
+  inputs.forEach((i) => {
+    if (i.value) {
+      sum += parseFloat(i.value);
+      count++;
+    }
   });
+  document.getElementById("cgpa-calc-res").innerText =
+    "Resulting CGPA: " + (count > 0 ? (sum / count).toFixed(2) : "--");
 }
+
+document
+  .getElementById("excel-file")
+  .addEventListener("change", handleFileUpload);
+document
+  .getElementById("calculate-btn")
+  .addEventListener("click", calculateSGPAFromSheet);
+document
+  .getElementById("download-btn")
+  .addEventListener("click", downloadReport);
