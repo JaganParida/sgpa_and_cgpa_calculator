@@ -15,7 +15,6 @@
     <div class="main-wrapper">
         <div class="calculator-card">
             <h1 class="ui-title">SGPA Calculator</h1>
-
             <div class="input-stack">
                 <div class="input-group">
                     <label>Select Semester</label>
@@ -31,32 +30,25 @@
                         <option value="8">Semester 8</option>
                     </select>
                 </div>
-
                 <div class="input-group">
                     <label>Upload Excel File</label>
                     <input type="file" id="excel-file" accept=".xlsx,.xls" />
                 </div>
-
                 <div class="input-group">
                     <label>Registration Number</label>
                     <input type="text" id="regno-input" placeholder="e.g. 230301120XXX" />
                 </div>
             </div>
-
             <button id="calculate-btn" class="primary-btn">Calculate SGPA & Generate Report</button>
-
             <div class="quick-stats">
                 <div class="stat-box">
                     <span class="stat-label">Calculated SGPA</span>
                     <span id="sgpa-result" class="stat-value">0.00</span>
                 </div>
             </div>
-
             <div id="report-output"></div>
-
             <button id="download-btn" class="success-btn spaced-btn" style="display:none;">📄 Download PDF
                 Report</button>
-
             <div class="cgpa-tool">
                 <h3>Quick CGPA Calculator</h3>
                 <div id="cgpa-entries">
@@ -70,7 +62,6 @@
                 </div>
                 <p id="cgpa-calc-res">Resulting CGPA: --</p>
             </div>
-
             <footer class="main-footer">
                 made with &hearts; by Jagan
             </footer>
