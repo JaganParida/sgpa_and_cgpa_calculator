@@ -27,7 +27,7 @@ function calculateSGPAFromSheet() {
   const regNo = document.getElementById("regno-input").value.trim();
   const sem = document.getElementById("semester-number").value;
   const reportDiv = document.getElementById("report-output");
-  const downloadBtn = document.getElementById("download-btn");
+  const downloadActions = document.getElementById("download-actions");
 
   if (!regNo || workbookData.length === 0) {
     alert("Please upload file and enter Registration Number.");
@@ -40,42 +40,36 @@ function calculateSGPAFromSheet() {
   if (studentRows.length === 0) {
     reportDiv.innerHTML =
       "<div style='color:red; text-align:center; padding:20px; font-weight:bold;'>❌ No data found for this Reg No.</div>";
-    downloadBtn.style.display = "none";
+    downloadActions.style.display = "none";
     return;
   }
 
-  let totalWeightedPoints = 0;
-  let totalSGPACredits = 0;
-  let creditsCleared = 0;
+  let totalWeightedPoints = 0,
+    totalSGPACredits = 0,
+    creditsCleared = 0;
   let sGradeFound = false;
+  let backlogSubjects = [];
   const studentName = studentRows[0]["Name"];
 
   const tableRowsHTML = studentRows
     .map((row, index) => {
       const grade = String(row["Grade"]).trim().toUpperCase();
       const credit = parseCredit(row["Credits"]);
+      const subName = row["Subject_Name"] || "Unknown Subject";
 
       if (grade === "S") sGradeFound = true;
+      if (grade === "F" || grade === "M" || grade === "S")
+        backlogSubjects.push(subName);
 
       if (grade !== "R" && grade !== "S") {
         const points =
           validGradePoints[grade] !== undefined ? validGradePoints[grade] : 0;
         totalWeightedPoints += points * credit;
         totalSGPACredits += credit;
-        if (grade !== "F" && grade !== "M") {
-          creditsCleared += credit;
-        }
+        if (grade !== "F" && grade !== "M") creditsCleared += credit;
       }
 
-      return `
-            <tr>
-                <td>${index + 1}</td>
-                <td>${row["Subject_Code"] || ""}</td>
-                <td style="text-align:left;">${row["Subject_Name"] || ""}</td>
-                <td>${row["Type"] || ""}</td>
-                <td>${credit.toFixed(1)}</td>
-                <td>${grade}</td>
-            </tr>`;
+      return `<tr><td>${index + 1}</td><td>${row["Subject_Code"] || ""}</td><td style="text-align:left;">${subName}</td><td>${row["Type"] || ""}</td><td>${credit.toFixed(1)}</td><td>${grade}</td></tr>`;
     })
     .join("");
 
@@ -83,8 +77,22 @@ function calculateSGPAFromSheet() {
     totalSGPACredits > 0
       ? (totalWeightedPoints / totalSGPACredits).toFixed(2)
       : "0.00";
+
+  let feedbackHTML = "";
+  if (backlogSubjects.length > 0) {
+    feedbackHTML = `<div class="feedback-box warning download-hide">
+            <p><strong>Backlog Alert:</strong> Please clear these subjects: <span style="color: #d9534f;">${backlogSubjects.join(", ")}</span>.</p>
+            <p>Don't lose hope! Hard work today is the success of tomorrow. You can do it!</p>
+        </div>`;
+  } else {
+    feedbackHTML = `<div class="feedback-box success download-hide">
+            <p><strong>Congratulations!</strong> You have passed all subjects in this semester.</p>
+            <p>Excellent performance, keep up the great work and maintain this momentum! 🚀</p>
+        </div>`;
+  }
+
   const sWarning = sGradeFound
-    ? `<div style="color: #856404; background-color: #fff3cd; border: 1px solid #ffeeba; padding: 10px; margin-bottom: 15px; border-radius: 5px; text-align: center; font-weight: bold;">⚠️ There is any logical issue due to S grade point please recheck like this.</div>`
+    ? `<div class="s-warning download-hide">⚠️ There is a logical issue due to S grade point. Please recheck.</div>`
     : "";
 
   reportDiv.innerHTML = `
@@ -99,60 +107,62 @@ function calculateSGPAFromSheet() {
                 <div class="meta-item"><span>Semester:</span> <strong>Sem ${sem}</strong></div>
             </div>
             ${sWarning}
-            <div class="table-responsive">
-                <table class="result-table">
-                    <thead>
-                        <tr>
-                            <th>SL.NO</th>
-                            <th>SUB.CODE</th>
-                            <th>SUBJECT</th>
-                            <th>TYPE</th>
-                            <th>CREDIT</th>
-                            <th>GRADE</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${tableRowsHTML}
-                    </tbody>
-                </table>
-            </div>
+            <div class="table-responsive"><table class="result-table"><thead><tr><th>SL.NO</th><th>SUB.CODE</th><th>SUBJECT</th><th>TYPE</th><th>CREDIT</th><th>GRADE</th></tr></thead><tbody>${tableRowsHTML}</tbody></table></div>
+            ${feedbackHTML}
             <div class="sheet-footer">
-                <div class="footer-info">
-                    <p>Credits Cleared: ${creditsCleared}</p>
-                    <p>Generated On: ${new Date().toLocaleDateString("en-GB")}</p>
-                </div>
-                <div class="sgpa-badge">
-                    <span class="label">SGPA</span>
-                    <span class="value">${finalSGPA}</span>
-                </div>
+                <div class="footer-info"><p>Credits Cleared: ${creditsCleared}</p><p>Generated On: ${new Date().toLocaleDateString("en-GB")}</p></div>
+                <div class="sgpa-badge"><span class="label">SGPA</span><span class="value">${finalSGPA}</span></div>
             </div>
         </div>
     `;
 
   document.getElementById("sgpa-result").innerText = finalSGPA;
-  downloadBtn.style.display = "block";
+  downloadActions.style.display = "flex";
 }
 
 function downloadReport() {
   const element = document.getElementById("grade-sheet-container");
   const originalWidth = element.style.width;
+  const hiddenElements = element.querySelectorAll(".download-hide");
+  hiddenElements.forEach((el) => (el.style.display = "none"));
   element.style.width = "900px";
+  html2canvas(element, { scale: 3.5, useCORS: true, windowWidth: 1200 }).then(
+    (canvas) => {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF("p", "mm", "a4");
+      pdf.addImage(
+        canvas.toDataURL("image/jpeg", 1.0),
+        "JPEG",
+        0,
+        0,
+        pdf.internal.pageSize.getWidth(),
+        (canvas.height * pdf.internal.pageSize.getWidth()) / canvas.width,
+      );
+      pdf.save(
+        `SGPA_Report_${document.getElementById("regno-input").value}.pdf`,
+      );
+      element.style.width = originalWidth;
+      hiddenElements.forEach((el) => (el.style.display = ""));
+    },
+  );
+}
 
-  html2canvas(element, {
-    scale: 3.5,
-    useCORS: true,
-    windowWidth: 1200,
-  }).then((canvas) => {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF("p", "mm", "a4");
-    const imgData = canvas.toDataURL("image/jpeg", 1.0);
-    const width = pdf.internal.pageSize.getWidth();
-    const height = (canvas.height * width) / canvas.width;
-
-    pdf.addImage(imgData, "JPEG", 0, 0, width, height, undefined, "FAST");
-    pdf.save(`SGPA_Report_${document.getElementById("regno-input").value}.pdf`);
-    element.style.width = originalWidth;
-  });
+function downloadPhoto() {
+  const element = document.getElementById("grade-sheet-container");
+  const originalWidth = element.style.width;
+  const hiddenElements = element.querySelectorAll(".download-hide");
+  hiddenElements.forEach((el) => (el.style.display = "none"));
+  element.style.width = "900px";
+  html2canvas(element, { scale: 3.5, useCORS: true, windowWidth: 1200 }).then(
+    (canvas) => {
+      const link = document.createElement("a");
+      link.download = `SGPA_Report_${document.getElementById("regno-input").value}.jpg`;
+      link.href = canvas.toDataURL("image/jpeg", 1.0);
+      link.click();
+      element.style.width = originalWidth;
+      hiddenElements.forEach((el) => (el.style.display = ""));
+    },
+  );
 }
 
 function addCgpaRow() {
@@ -185,3 +195,6 @@ document
 document
   .getElementById("download-btn")
   .addEventListener("click", downloadReport);
+document
+  .getElementById("download-photo-btn")
+  .addEventListener("click", downloadPhoto);

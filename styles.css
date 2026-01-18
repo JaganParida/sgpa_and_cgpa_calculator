@@ -16,6 +16,7 @@ body {
   display: flex;
   justify-content: center;
   padding: 20px;
+  min-height: 100vh;
 }
 
 .calculator-card {
@@ -49,6 +50,38 @@ body {
   margin-bottom: 6px;
 }
 
+.input-row-flex {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.input-row-flex input {
+  flex: 1;
+}
+
+.drive-link-btn {
+  white-space: nowrap;
+  background: #fff;
+  border: 1.5px solid #ddd;
+  padding: 10px 15px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #555;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.3s;
+}
+
+.drive-link-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: #f0f7ff;
+}
+
 input,
 select {
   width: 100%;
@@ -78,27 +111,21 @@ button {
 .success-btn {
   background: var(--success);
   color: white;
+  flex: 1;
 }
 
-.spaced-btn {
-  margin-top: 50px !important;
-}
-
-.outline-btn {
-  background: #fff;
-  border: 1.5px solid #ddd;
-}
-
-.quick-stats {
-  text-align: center;
+.download-actions {
+  display: flex;
+  gap: 10px;
   margin-top: 20px;
+  flex-wrap: wrap;
 }
 
 .stat-box {
   padding: 15px 30px;
   background: #f0f7ff;
   border-radius: 12px;
-  display: inline-block;
+  text-align: center;
   width: 100%;
   box-sizing: border-box;
 }
@@ -171,13 +198,24 @@ button {
 .table-responsive {
   width: 100%;
   overflow-x: auto;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .result-table {
   width: 100%;
   border-collapse: collapse;
   min-width: 700px;
+}
+
+@media screen and (max-width: 600px) {
+  .input-row-flex {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .drive-link-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 @media screen and (min-width: 850px) {
@@ -198,6 +236,39 @@ button {
 .result-table th {
   background: #bcd8f97a;
   text-transform: uppercase;
+}
+
+.feedback-box {
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.feedback-box.warning {
+  background-color: #fff5f5;
+  border: 1px solid #feb2b2;
+  color: #c53030;
+}
+
+.feedback-box.success {
+  background-color: #f0fff4;
+  border: 1px solid #9ae6b4;
+  color: #276749;
+}
+
+.s-warning {
+  color: #856404;
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 13px;
 }
 
 .sheet-footer {
@@ -230,6 +301,11 @@ button {
   margin-top: 10px;
 }
 
+.outline-btn {
+  background: #fff;
+  border: 1.5px solid #ddd;
+}
+
 .main-footer {
   text-align: center;
   margin-top: 40px;
@@ -240,5 +316,4 @@ button {
 .main-footer a {
   text-decoration: none;
   color: #999;
-  cursor: pointer;
 }

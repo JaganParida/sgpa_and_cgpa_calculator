@@ -33,7 +33,13 @@
                 </div>
                 <div class="input-group">
                     <label>Upload Excel File</label>
-                    <input type="file" id="excel-file" accept=".xlsx,.xls" />
+                    <div class="input-row-flex">
+                        <input type="file" id="excel-file" accept=".xlsx,.xls" />
+                        <a href="https://drive.google.com/drive/folders/1qTvjHTLj2-1rtELg4USURvPMtAh3vW4F?usp=sharing"
+                            target="_blank" class="drive-link-btn">
+                            <i class="ri-google-drive-fill"></i> Get Excel
+                        </a>
+                    </div>
                 </div>
                 <div class="input-group">
                     <label>Registration Number</label>
@@ -48,8 +54,11 @@
                 </div>
             </div>
             <div id="report-output"></div>
-            <button id="download-btn" class="success-btn spaced-btn" style="display:none;">📄 Download PDF
-                Report</button>
+            <div class="download-actions" style="display: none;" id="download-actions">
+                <button id="download-btn" class="success-btn">📄 Download PDF</button>
+                <button id="download-photo-btn" class="success-btn" style="background-color: #6c757d;">🖼️ Download
+                    Photo</button>
+            </div>
             <div class="cgpa-tool">
                 <h3>Quick CGPA Calculator</h3>
                 <div id="cgpa-entries">
