@@ -58,6 +58,7 @@ body {
 
 .input-row-flex input {
   flex: 1;
+  min-width: 0;
 }
 
 .drive-link-btn {
@@ -74,6 +75,8 @@ body {
   align-items: center;
   gap: 6px;
   transition: 0.3s;
+  height: 45px;
+  box-sizing: border-box;
 }
 
 .drive-link-btn:hover {
@@ -90,6 +93,7 @@ select {
   border-radius: 8px;
   box-sizing: border-box;
   font-size: 15px;
+  height: 45px;
 }
 
 button {
@@ -116,6 +120,7 @@ button {
 
 .download-actions {
   display: flex;
+  flex-direction: row;
   gap: 10px;
   margin-top: 20px;
   flex-wrap: wrap;
@@ -211,10 +216,17 @@ button {
   .input-row-flex {
     flex-direction: column;
     align-items: flex-start;
+    gap: 5px;
   }
   .drive-link-btn {
     width: 100%;
     justify-content: center;
+  }
+  .calculator-card {
+    padding: 20px;
+  }
+  .grade-sheet {
+    padding: 20px;
   }
 }
 

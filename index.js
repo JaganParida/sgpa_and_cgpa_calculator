@@ -107,11 +107,33 @@ function calculateSGPAFromSheet() {
                 <div class="meta-item"><span>Semester:</span> <strong>Sem ${sem}</strong></div>
             </div>
             ${sWarning}
-            <div class="table-responsive"><table class="result-table"><thead><tr><th>SL.NO</th><th>SUB.CODE</th><th>SUBJECT</th><th>TYPE</th><th>CREDIT</th><th>GRADE</th></tr></thead><tbody>${tableRowsHTML}</tbody></table></div>
+            <div class="table-responsive">
+                <table class="result-table">
+                    <thead>
+                        <tr>
+                            <th>SL.NO</th>
+                            <th>SUB.CODE</th>
+                            <th>SUBJECT</th>
+                            <th>TYPE</th>
+                            <th>CREDIT</th>
+                            <th>GRADE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tableRowsHTML}
+                    </tbody>
+                </table>
+            </div>
             ${feedbackHTML}
             <div class="sheet-footer">
-                <div class="footer-info"><p>Credits Cleared: ${creditsCleared}</p><p>Generated On: ${new Date().toLocaleDateString("en-GB")}</p></div>
-                <div class="sgpa-badge"><span class="label">SGPA</span><span class="value">${finalSGPA}</span></div>
+                <div class="footer-info">
+                    <p>Credits Cleared: ${creditsCleared}</p>
+                    <p>Generated On: ${new Date().toLocaleDateString("en-GB")}</p>
+                </div>
+                <div class="sgpa-badge">
+                    <span class="label">SGPA</span>
+                    <span class="value">${finalSGPA}</span>
+                </div>
             </div>
         </div>
     `;
