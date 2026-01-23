@@ -29,23 +29,29 @@ body {
 }
 
 .navbar {
-  background: rgba(5, 5, 5, 0.85);
+  background: rgba(5, 5, 5, 0.95);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   position: sticky;
   top: 0;
   z-index: 1000;
-  padding: 15px 0;
+  height: 70px;
+  padding: 0;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-content {
   max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 100%;
 }
 
 .logo-group {
@@ -172,6 +178,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
   color: #ccc;
 }
+
 .glass-btn.secondary-glass:hover {
   color: #fff;
   background: rgba(255, 255, 255, 0.05);
@@ -372,6 +379,7 @@ select {
 .select-wrapper {
   position: relative;
 }
+
 .select-wrapper::after {
   content: "\ea4e";
   font-family: "remixicon";
@@ -452,6 +460,7 @@ input::placeholder {
   position: relative;
   width: 100%;
 }
+
 .file-upload-box input[type="file"] {
   position: absolute;
   width: 100%;
@@ -460,6 +469,7 @@ input::placeholder {
   cursor: pointer;
   z-index: 2;
 }
+
 .file-content {
   background: var(--bg-input);
   border: 1px dashed #444;
@@ -472,6 +482,7 @@ input::placeholder {
   transition: 0.2s;
   text-align: center;
 }
+
 .file-content:hover {
   border-color: #888;
   background: #222;
@@ -490,6 +501,7 @@ input::placeholder {
   font-size: 1rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .primary-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(255, 255, 255, 0.25);
@@ -506,6 +518,7 @@ input::placeholder {
   font-weight: 600;
   transition: all 0.3s ease;
 }
+
 .outline-btn:hover {
   border-color: #fff;
   background: rgba(255, 255, 255, 0.08);
@@ -519,12 +532,14 @@ input::placeholder {
   margin-top: 30px;
   text-align: center;
 }
+
 .res-label {
   color: #666;
   letter-spacing: 1px;
   font-size: 0.8rem;
   margin-bottom: 5px;
 }
+
 #cgpa-result-value {
   font-size: 3.5rem;
   font-weight: 800;
@@ -591,16 +606,19 @@ input::placeholder {
 .info-section {
   margin-bottom: 60px;
 }
+
 .section-header h2 {
   border-left: 4px solid #fff;
   padding-left: 20px;
   font-size: 1.8rem;
 }
+
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
+
 .feature-card {
   background: #0f0f0f;
   border: 1px solid #222;
@@ -608,11 +626,13 @@ input::placeholder {
   border-radius: 20px;
   transition: 0.3s;
 }
+
 .feature-card:hover {
   border-color: #444;
   background: #141414;
   transform: translateY(-8px);
 }
+
 .card-icon {
   font-size: 1.8rem;
   color: #fff;
@@ -634,12 +654,14 @@ input::placeholder {
   text-align: center;
   width: 100%;
 }
+
 .footer-links {
   display: flex;
   justify-content: center;
   gap: 40px;
   margin-bottom: 30px;
 }
+
 .footer-links a {
   color: #888;
   text-decoration: none;
@@ -652,11 +674,13 @@ input::placeholder {
   border-radius: 50px;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
+
 .footer-links a:hover {
   color: #fff;
   background: rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
 }
+
 .copyright {
   color: #444;
 }
@@ -696,12 +720,14 @@ input::placeholder {
   z-index: 0;
   pointer-events: none;
 }
+
 .sheet-header {
   text-align: center;
   margin-bottom: 30px;
   position: relative;
   z-index: 2;
 }
+
 .univ-name {
   font-size: 24px;
   font-weight: 900;
@@ -710,6 +736,7 @@ input::placeholder {
   margin: 0;
   font-family: Arial, sans-serif;
 }
+
 .doc-title {
   font-size: 18px;
   font-weight: bold;
@@ -717,11 +744,13 @@ input::placeholder {
   margin-top: 10px;
   color: #000;
 }
+
 .header-line {
   border-top: 2px solid #000;
   margin-top: 25px;
   margin-bottom: 35px;
 }
+
 .result-table {
   width: 100%;
   border-collapse: collapse;
@@ -729,6 +758,7 @@ input::placeholder {
   z-index: 2;
   margin-bottom: 30px;
 }
+
 .result-table th {
   background: #f0f0f0;
   border: 1px solid #000;
@@ -737,12 +767,14 @@ input::placeholder {
   font-weight: bold;
   font-family: Arial, sans-serif;
 }
+
 .result-table td {
   border: 1px solid #000;
   padding: 10px;
   font-size: 14px;
   text-align: center;
 }
+
 .feedback-box {
   border: 1px solid #22c55e;
   background: #f0fdf4;
@@ -756,6 +788,7 @@ input::placeholder {
   z-index: 2;
   font-family: Arial, sans-serif;
 }
+
 .sheet-footer {
   display: flex;
   justify-content: space-between;
@@ -764,12 +797,14 @@ input::placeholder {
   z-index: 2;
   margin-top: 40px;
 }
+
 .sgpa-box {
   border: 2px solid #000;
   padding: 15px 40px;
   text-align: center;
   border-radius: 4px;
 }
+
 .sgpa-value {
   font-size: 32px;
   font-weight: 900;
@@ -780,31 +815,46 @@ input::placeholder {
   .nav-content {
     padding: 0 20px;
   }
+
   .hamburger {
     display: block;
+    font-size: 1.5rem;
+    color: #fff;
+    cursor: pointer;
   }
+
   .header-actions {
-    display: flex;
     flex-direction: column;
+    width: 100%;
+    gap: 15px;
   }
+
+  .glass-btn {
+    width: 100%;
+  }
+
   .nav-menu {
     position: fixed;
     top: 70px;
     right: -100%;
     width: 100%;
     height: calc(100vh - 70px);
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(20px);
+    background: #050505;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     gap: 30px;
-    transition: 0.4s ease;
-    border-left: 1px solid #222;
+    padding-top: 50px;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-top: 1px solid #222;
+    overflow-y: auto;
+    justify-content: center;
   }
+
   .nav-menu.active {
     right: 0;
   }
+
   .nav-link {
     font-size: 1.2rem;
     padding: 15px 30px;
@@ -813,14 +863,17 @@ input::placeholder {
   .cards-grid {
     grid-template-columns: 1fr 1fr;
   }
+
   .footer-links {
     flex-direction: column;
     gap: 15px;
     align-items: center;
   }
+
   .download-actions {
     flex-direction: column;
   }
+
   .grade-sheet {
     transform: scale(0.85);
     margin-bottom: -150px;
@@ -831,17 +884,21 @@ input::placeholder {
   .cards-grid {
     grid-template-columns: 1fr;
   }
+
   .main-title {
     font-size: 1.8rem;
   }
+
   .card-header {
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
+
   .cgpa-actions {
     flex-direction: column;
   }
+
   .grade-sheet {
     transform: scale(0.42);
     margin-bottom: -650px;
@@ -862,9 +919,11 @@ input::placeholder {
   z-index: 2000;
   padding: 20px;
 }
+
 .modal-overlay.open {
   display: flex;
 }
+
 .modal-content {
   background: #111;
   border: 1px solid #333;
@@ -876,11 +935,13 @@ input::placeholder {
   max-height: 90vh;
   overflow-y: auto;
 }
+
 .modal-title {
   margin-top: 0;
   color: white;
   text-align: center;
 }
+
 .close-modal {
   position: absolute;
   top: 15px;
@@ -891,6 +952,7 @@ input::placeholder {
   font-size: 1.5rem;
   cursor: pointer;
 }
+
 .formula-item {
   margin-bottom: 15px;
   background: #1a1a1a;
@@ -898,11 +960,13 @@ input::placeholder {
   border-radius: 12px;
   border: 1px solid #333;
 }
+
 .formula-item h3 {
   margin: 0 0 5px 0;
   font-size: 0.9rem;
   color: #fff;
 }
+
 .formula-item code {
   display: block;
   background: #000;
@@ -916,12 +980,14 @@ input::placeholder {
   text-align: center;
   margin-bottom: 15px;
 }
+
 .modal-icon-header i {
   font-size: 3rem;
   background: linear-gradient(135deg, #eee, #999);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
 .drive-btn {
   display: flex;
   align-items: center;
@@ -937,12 +1003,14 @@ input::placeholder {
   position: relative;
   overflow: hidden;
 }
+
 .drive-btn:hover {
   border-color: #555;
   background: linear-gradient(135deg, #2a2a2a, #1f1f1f);
   transform: translateY(-3px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
+
 .drive-icon {
   width: 45px;
   height: 45px;
@@ -954,26 +1022,31 @@ input::placeholder {
   font-size: 1.5rem;
   color: #fff;
 }
+
 .drive-text {
   flex: 1;
   padding: 0 15px;
   display: flex;
   flex-direction: column;
 }
+
 .drive-text span {
   font-weight: 700;
   font-size: 1.1rem;
 }
+
 .drive-text small {
   color: #888;
   font-weight: 400;
   margin-top: 4px;
 }
+
 .arrow {
   font-size: 1.2rem;
   color: #666;
   transition: 0.3s;
 }
+
 .drive-btn:hover .arrow {
   color: #fff;
   transform: translateX(3px) translateY(-3px);
