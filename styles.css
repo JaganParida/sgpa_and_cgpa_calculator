@@ -761,10 +761,9 @@ input::placeholder {
   .nav-menu {
     width: 100%;
     overflow-x: auto;
-    padding-bottom: 5px;
     -webkit-overflow-scrolling: touch;
     justify-content: center;
-    padding-top: 8px;
+    padding: 10px;
   }
   .nav-link {
     white-space: nowrap;
