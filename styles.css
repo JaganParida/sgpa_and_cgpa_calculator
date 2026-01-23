@@ -7,7 +7,6 @@
   --text-muted: #a0a0a0;
   --primary: #ffffff;
   --focus-glow: rgba(255, 255, 255, 0.15);
-
   --grad-primary: linear-gradient(135deg, #ffffff 0%, #d4d4d4 100%);
   --grad-dark: linear-gradient(145deg, #1a1a1a, #0d0d0d);
   --grad-pdf: linear-gradient(135deg, #000000 0%, #aaaaaa 100%);
@@ -103,7 +102,14 @@ body {
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
 }
 
-/* --- LAYOUT --- */
+.hamburger {
+  display: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #fff;
+  z-index: 1001;
+}
+
 .main-wrapper {
   max-width: 900px;
   margin: 0 auto;
@@ -111,7 +117,6 @@ body {
   min-height: calc(100vh - 200px);
 }
 
-/* --- HERO --- */
 .hero-section {
   text-align: center;
   margin-bottom: 50px;
@@ -134,6 +139,14 @@ body {
   font-size: 1.1rem;
 }
 
+.header-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
 .glass-btn {
   position: relative;
   padding: 12px 30px;
@@ -150,7 +163,18 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 15px;
+  width: 200px;
+  justify-content: center;
+}
+
+.glass-btn.secondary-glass {
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #ccc;
+}
+.glass-btn.secondary-glass:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .glass-btn .btn-content {
@@ -564,7 +588,6 @@ input::placeholder {
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* --- HOW TO & FOOTER --- */
 .info-section {
   margin-bottom: 60px;
 }
@@ -755,19 +778,38 @@ input::placeholder {
 
 @media (max-width: 850px) {
   .nav-content {
+    padding: 0 20px;
+  }
+  .hamburger {
+    display: block;
+  }
+  .header-actions {
+    display: flex;
     flex-direction: column;
-    gap: 15px;
   }
   .nav-menu {
+    position: fixed;
+    top: 70px;
+    right: -100%;
     width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    height: calc(100vh - 70px);
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(20px);
+    flex-direction: column;
     justify-content: center;
-    padding: 10px;
+    align-items: center;
+    gap: 30px;
+    transition: 0.4s ease;
+    border-left: 1px solid #222;
+  }
+  .nav-menu.active {
+    right: 0;
   }
   .nav-link {
-    white-space: nowrap;
+    font-size: 1.2rem;
+    padding: 15px 30px;
   }
+
   .cards-grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -779,7 +821,6 @@ input::placeholder {
   .download-actions {
     flex-direction: column;
   }
-
   .grade-sheet {
     transform: scale(0.85);
     margin-bottom: -150px;
@@ -801,7 +842,6 @@ input::placeholder {
   .cgpa-actions {
     flex-direction: column;
   }
-
   .grade-sheet {
     transform: scale(0.42);
     margin-bottom: -650px;
@@ -870,4 +910,71 @@ input::placeholder {
   border-radius: 6px;
   color: #60a5fa;
   font-family: monospace;
+}
+
+.modal-icon-header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+.modal-icon-header i {
+  font-size: 3rem;
+  background: linear-gradient(135deg, #eee, #999);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.drive-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #1f1f1f, #151515);
+  padding: 20px;
+  border-radius: 16px;
+  text-decoration: none;
+  color: #fff;
+  border: 1px solid #333;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.drive-btn:hover {
+  border-color: #555;
+  background: linear-gradient(135deg, #2a2a2a, #1f1f1f);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.drive-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #fff;
+}
+.drive-text {
+  flex: 1;
+  padding: 0 15px;
+  display: flex;
+  flex-direction: column;
+}
+.drive-text span {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.drive-text small {
+  color: #888;
+  font-weight: 400;
+  margin-top: 4px;
+}
+.arrow {
+  font-size: 1.2rem;
+  color: #666;
+  transition: 0.3s;
+}
+.drive-btn:hover .arrow {
+  color: #fff;
+  transform: translateX(3px) translateY(-3px);
 }

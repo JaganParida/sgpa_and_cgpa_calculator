@@ -5,16 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Centurion Grade Calculator Pro</title>
-
     <link rel="shortcut icon" href="cutm.png" type="image/x-icon">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -26,10 +23,14 @@
                 <img src="cutm_text.jpg" alt="Logo" class="nav-logo" onerror="this.style.display='none'">
                 <div class="brand-name">CUTM <span>Calc</span></div>
             </div>
-            <ul class="nav-menu">
-                <li><a href="#" onclick="switchTab('sgpa')" class="nav-link active" id="nav-sgpa">SGPA</a></li>
-                <li><a href="#" onclick="switchTab('cgpa')" class="nav-link" id="nav-cgpa">CGPA</a></li>
-                <li><a href="#how-to" class="nav-link">How to Use</a></li>
+            <div class="hamburger" onclick="toggleMenu()">
+                <i class="ri-menu-3-line" id="menu-icon"></i>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#" onclick="switchTab('sgpa'); closeMenu()" class="nav-link active" id="nav-sgpa">SGPA</a>
+                </li>
+                <li><a href="#" onclick="switchTab('cgpa'); closeMenu()" class="nav-link" id="nav-cgpa">CGPA</a></li>
+                <li><a href="#how-to" onclick="closeMenu()" class="nav-link">How to Use</a></li>
             </ul>
         </div>
     </nav>
@@ -43,7 +44,14 @@
             <div class="header-actions">
                 <button onclick="openModal()" class="glass-btn">
                     <span class="btn-content">
-                        View Formulas<i class="ri-arrow-right-long-line"></i>
+                        View Formulas <i class="ri-function-line"></i>
+                    </span>
+                    <div class="shine"></div>
+                </button>
+
+                <button onclick="openExcelModal()" class="glass-btn secondary-glass">
+                    <span class="btn-content">
+                        Get Excel Format <i class="ri-file-excel-line"></i>
                     </span>
                     <div class="shine"></div>
                 </button>
@@ -297,6 +305,33 @@
             </div>
             <div style="text-align:center; margin-top:20px;">
                 <button onclick="closeModal()" class="outline-btn" style="width:auto; padding:8px 30px;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="excel-modal" class="modal-overlay">
+        <div class="modal-content drive-modal">
+            <button class="close-modal" onclick="closeExcelModal()"><i class="ri-close-line"></i></button>
+            <div class="modal-icon-header">
+                <i class="ri-folder-download-fill"></i>
+            </div>
+            <h2 class="modal-title">Download Excel of Semester Results</h2>
+            <p style="text-align:center; color:#aaa; margin-bottom:25px;">Access the required excel files from the
+                official Drive below.</p>
+
+            <a href="https://drive.google.com/drive/folders/1qTvjHTLj2-1rtELg4USURvPMtAh3vW4F?usp=sharing"
+                target="_blank" class="drive-btn">
+                <div class="drive-icon"><i class="ri-google-drive-fill"></i></div>
+                <div class="drive-text">
+                    <span>Open Drive Folder</span>
+                    <small>View & Download Excel Files</small>
+                </div>
+                <i class="ri-external-link-line arrow"></i>
+            </a>
+
+            <div style="text-align:center; margin-top:20px;">
+                <button onclick="closeExcelModal()" class="outline-btn"
+                    style="width:auto; padding:8px 30px;">Close</button>
             </div>
         </div>
     </div>

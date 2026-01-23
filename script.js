@@ -24,6 +24,37 @@ document
     if (e.target === this) closeModal();
   });
 
+function openExcelModal() {
+  document.getElementById("excel-modal").classList.add("open");
+}
+function closeExcelModal() {
+  document.getElementById("excel-modal").classList.remove("open");
+}
+document.getElementById("excel-modal").addEventListener("click", function (e) {
+  if (e.target === this) closeExcelModal();
+});
+
+function toggleMenu() {
+  const nav = document.getElementById("nav-menu");
+  const icon = document.getElementById("menu-icon");
+  nav.classList.toggle("active");
+
+  if (nav.classList.contains("active")) {
+    icon.classList.remove("ri-menu-3-line");
+    icon.classList.add("ri-close-line");
+  } else {
+    icon.classList.remove("ri-close-line");
+    icon.classList.add("ri-menu-3-line");
+  }
+}
+
+function closeMenu() {
+  const nav = document.getElementById("nav-menu");
+  const icon = document.getElementById("menu-icon");
+  nav.classList.remove("active");
+  icon.classList.remove("ri-close-line");
+  icon.classList.add("ri-menu-3-line");
+}
 
 function switchTab(tabId) {
   document.getElementById("sgpa-section").style.display = "none";
@@ -83,7 +114,7 @@ document.getElementById("calculate-btn").addEventListener("click", function () {
     creditsCleared = 0;
   let backlogs = [];
   const studentName = studentRows[0]["Name"];
-  const watermarkUrl = "cutm_text.jpg"; 
+  const watermarkUrl = "cutm_text.jpg";
 
   const rowsHTML = studentRows
     .map((row, i) => {
