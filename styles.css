@@ -34,17 +34,14 @@ body {
   background: rgba(5, 5, 5, 0.95);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 1000;
   height: 70px;
-  padding: 0;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: fixed;
-  top: 0;
 }
 
 .nav-content {
@@ -694,10 +691,11 @@ input::placeholder {
 .report-preview-wrapper {
   width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   padding: 20px 0;
-  overflow: hidden;
+  gap: 20px;
+  overflow-x: auto;
 }
 
 .grade-sheet {
@@ -712,8 +710,8 @@ input::placeholder {
   font-family: "Times New Roman", Times, serif;
   box-sizing: border-box;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  margin: 0;
   transform-origin: top center;
-  margin: 0 auto;
 }
 
 .watermark {
@@ -845,18 +843,15 @@ input::placeholder {
     right: 0;
     width: 100%;
     height: calc(100vh - 70px);
-    background: rgba(5, 5, 5,0.9);
+    background: rgba(5, 5, 5, 0.9);
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     gap: 30px;
     padding-top: 50px;
-    justify-content: center;
     backdrop-filter: blur(8px);
-
     transform: translateX(100%);
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
     border-top: 1px solid #222;
     overflow-y: auto;
   }
@@ -1060,4 +1055,52 @@ input::placeholder {
 .drive-btn:hover .arrow {
   color: #fff;
   transform: translateX(3px) translateY(-3px);
+}
+
+.r-grade-warning {
+  background: rgba(234, 179, 8, 0.1);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  color: #fef3c7;
+  padding: 16px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  max-width: 794px;
+  width: 100%;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-out;
+  box-sizing: border-box;
+}
+
+.r-grade-warning i {
+  font-size: 1.8rem;
+  color: #fbbf24;
+  flex-shrink: 0;
+}
+
+.r-grade-warning strong {
+  color: #fbbf24;
+  display: block;
+  margin-bottom: 4px;
+  font-size: 1rem;
+}
+
+.r-grade-warning p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #d1d5db;
+  line-height: 1.4;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

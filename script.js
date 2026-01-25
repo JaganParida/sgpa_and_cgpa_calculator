@@ -5,16 +5,18 @@ const validGradePoints = {
   B: 7,
   C: 6,
   D: 5,
-  R: 0,
+  R: 10,
   F: 0,
   M: 0,
   S: 0,
 };
+
 let workbookData = [];
 
 function openModal() {
   document.getElementById("formula-modal").classList.add("open");
 }
+
 function closeModal() {
   document.getElementById("formula-modal").classList.remove("open");
 }
@@ -27,6 +29,7 @@ document
 function openExcelModal() {
   document.getElementById("excel-modal").classList.add("open");
 }
+
 function closeExcelModal() {
   document.getElementById("excel-modal").classList.remove("open");
 }
@@ -82,9 +85,13 @@ document.getElementById("excel-file").addEventListener("change", function (e) {
     const reader = new FileReader();
     reader.onload = (evt) => {
       const data = new Uint8Array(evt.target.result);
-      const wb = XLSX.read(data, { type: "array" });
+      const wb = XLSX.read(data, {
+        type: "array",
+      });
       const sheet = wb.Sheets[wb.SheetNames[0]];
-      workbookData = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+      workbookData = XLSX.utils.sheet_to_json(sheet, {
+        defval: "",
+      });
     };
     reader.readAsArrayBuffer(e.target.files[0]);
   }
@@ -112,7 +119,7 @@ document.getElementById("calculate-btn").addEventListener("click", function () {
   let totalPoints = 0,
     totalCredits = 0,
     creditsCleared = 0;
-  let backlogs = [];
+
   const studentName = studentRows[0]["Name"];
   const watermarkUrl = "cutm_text.jpg";
 
@@ -123,16 +130,21 @@ document.getElementById("calculate-btn").addEventListener("click", function () {
       const subject = row["Subject_Name"] || "Unknown";
       const type = row["Type"] || "";
 
-      if (["F", "M", "S"].includes(grade)) backlogs.push(subject);
       let points =
         validGradePoints[grade] !== undefined ? validGradePoints[grade] : 0;
 
-      if (grade !== "R" && grade !== "S") {
+      if (grade !== "S") {
         totalPoints += points * credit;
         totalCredits += credit;
-        if (!["F", "M"].includes(grade)) creditsCleared += credit;
+
+        if (!["F", "M"].includes(grade)) {
+          creditsCleared += credit;
+        }
       }
-      if (grade === "R") creditsCleared += credit;
+
+      if (grade === "S") {
+        creditsCleared += credit;
+      }
 
       return `<tr>
             <td>${i + 1}</td>
@@ -147,9 +159,17 @@ document.getElementById("calculate-btn").addEventListener("click", function () {
 
   const sgpa =
     totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "0.00";
+
+  const actualBacklogs = studentRows
+    .filter((row) => {
+      const g = String(row["Grade"]).trim().toUpperCase();
+      return ["F", "M"].includes(g);
+    })
+    .map((r) => r["Subject_Name"]);
+
   const feedback =
-    backlogs.length > 0
-      ? `<div class="feedback-box" style="border-color:#ef4444; background:#fef2f2; color:#b91c1c;"><strong>Backlogs:</strong> ${backlogs.join(", ")}</div>`
+    actualBacklogs.length > 0
+      ? `<div class="feedback-box" style="border-color:#ef4444; background:#fef2f2; color:#b91c1c;"><strong>Backlogs:</strong> ${actualBacklogs.join(", ")}</div>`
       : `<div class="feedback-box"><strong>Congratulations!</strong> You have passed all subjects.<br>Excellent performance! 🚀</div>`;
 
   reportDiv.innerHTML = `
@@ -183,7 +203,9 @@ document.getElementById("calculate-btn").addEventListener("click", function () {
         </div>`;
 
   document.getElementById("download-actions").style.display = "flex";
-  reportDiv.scrollIntoView({ behavior: "smooth" });
+  reportDiv.scrollIntoView({
+    behavior: "smooth",
+  });
 });
 
 function addCgpaRow() {
